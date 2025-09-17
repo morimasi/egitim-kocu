@@ -1,102 +1,129 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { BookOpen, Users, Calendar, MessageCircle } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-2">
+              <BookOpen className="h-8 w-8 text-blue-600" />
+              <span className="text-xl font-bold text-gray-900">Eğitim Koçu</span>
+            </div>
+            <div className="flex space-x-4">
+              <Link href="/auth/login">
+                <Button variant="ghost">Giriş Yap</Button>
+              </Link>
+              <Link href="/auth/register">
+                <Button>Kayıt Ol</Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Hero Section */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl md:text-6xl">
+            Eğitim Koçluğu
+            <span className="block text-blue-600">Platformu</span>
+          </h1>
+          <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+            Öğrenci takibi, ödev yönetimi ve iletişimi tek platformda birleştiren 
+            modern eğitim koçluğu çözümü.
+          </p>
+          <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+            <div className="rounded-md shadow">
+              <Link href="/auth/register">
+                <Button size="lg" className="w-full">
+                  Hemen Başlayın
+                </Button>
+              </Link>
+            </div>
+            <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
+              <Link href="/auth/login">
+                <Button variant="outline" size="lg" className="w-full">
+                  Giriş Yapın
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Features */}
+        <div className="mt-16">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <Card>
+              <CardHeader>
+                <Users className="h-8 w-8 text-blue-600" />
+                <CardTitle className="text-lg">Öğrenci Takibi</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Öğrenci profillerini yönetin, hedefleri belirleyin ve ilerlemelerini takip edin.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <BookOpen className="h-8 w-8 text-green-600" />
+                <CardTitle className="text-lg">Ödev Yönetimi</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Ödevleri kolayca oluşturun, atayın ve değerlendirin. Dosya paylaşımı desteklenir.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <Calendar className="h-8 w-8 text-purple-600" />
+                <CardTitle className="text-lg">Hatırlatmalar</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Otomatik hatırlatmalarla önemli tarihleri kaçırmayın. E-posta bildirimleri.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <MessageCircle className="h-8 w-8 text-orange-600" />
+                <CardTitle className="text-lg">İletişim</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription>
+                  Koç ve öğrenci arasında anlık mesajlaşma. Dosya paylaşımı desteklenir.
+                </CardDescription>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="mt-24 bg-white">
+        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
+          <div className="flex justify-center space-x-6 md:order-2">
+            <p className="text-center text-sm text-gray-400">
+              &copy; 2024 Eğitim Koçu. Tüm hakları saklıdır.
+            </p>
+          </div>
+          <div className="mt-8 md:mt-0 md:order-1">
+            <div className="flex items-center justify-center md:justify-start">
+              <BookOpen className="h-6 w-6 text-blue-600" />
+              <span className="ml-2 text-lg font-semibold text-gray-900">Eğitim Koçu</span>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );
