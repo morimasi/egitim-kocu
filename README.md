@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Eğitim Koçluğu Uygulaması
 
 Modern, hızlı ve kullanıcı dostu eğitim koçluğu platformu. Öğrenci takibi, ödev yönetimi, hatırlatmalar ve iletişim özelliklerini tek platformda sunar.
@@ -125,3 +126,7 @@ MIT License
 ---
 
 **Not**: Bu proje hızlı prototyping için optimize edilmiştir. Production kullanımı için ek güvenlik önlemleri ve testler eklenmelidir.
+=======
+# egitim-kocu
+Eğitim Koçluğu
+>>>>>>> ae68e35cbccec09ba4db34f51f49e5e6b30738bd
