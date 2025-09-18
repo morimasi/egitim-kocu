@@ -1,16 +1,43 @@
-import { createServerComponentClient } from '@supabase/ssr'
+'use client';
+
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
-export default async function ConversationPage({ params }: { params: { id: string } }) {
-  const cookieStore = cookies()
-  const supabase = createServerComponentClient({ cookies: () => cookieStore })
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/login')
+export default function ConversationPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const supabase = createClientComponentClient();
+  const [messages, setMessages] = useState<any[]>([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push('/auth/login');
+        return;
+      }
+      setUser(session.user);
+      await loadMessages();
+      setLoading(false);
+    };
+    
+    getSession();
+  }, [router, supabase]);
+
+  const loadMessages = async () => {
+    // Mesajları yükleme kodu buraya gelecek
+  };
+
+  if (loading) return <div>Yükleniyor...</div>;
 
   const { data: profile } = await supabase
     .from('profiles')

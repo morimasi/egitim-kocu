@@ -1,10 +1,13 @@
-import { redirect } from 'next/navigation'
-import { createServerComponentClient } from '@supabase/ssr'
+'use client';
+
+import { useState, useEffect } from 'react';
+import next/navigation'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
   const cookieStore = cookies()
-  const supabase = createServerComponentClient({ cookies: () => cookieStore })
+  const supabase = createClientComponentClient() => cookieStore })
   
   // Kullanıcı kimlik doğrulamasını kontrol et
   const { data: { user }, error } = await supabase.auth.getUser()

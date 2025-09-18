@@ -1,16 +1,33 @@
-import { createServerComponentClient } from '@supabase/ssr'
+'use client';
+
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
-export default async function StudentInboxPage() {
+export default function StudentInboxPage() {
   const cookieStore = cookies()
-  const supabase = createServerComponentClient({ cookies: () => cookieStore })
+  const supabase = createClientComponentClient() => cookieStore })
 
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/auth/login')
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+  
+  useEffect(() => {
+    const getSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push('/auth/login');
+        return;
+      }
+      setUser(session.user);
+    };
+    
+    getSession();
+  }, [router, supabase]);
+  
+  if (!user) return <div>Yükleniyor...</div>;
 
   const { data: profile } = await supabase
     .from('profiles')
