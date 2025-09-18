@@ -1,12 +1,51 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+// Önbellek için tip tanımı
+interface CacheEntry {
+  response: NextResponse
+  timestamp: number
+}
+
+// Basit bir bellek içi önbellek
+const cache = new Map<string, CacheEntry>()
+const CACHE_TTL = 1000 * 60 * 5 // 5 dakika
+
+// Önbellek temizleme fonksiyonu
+function cleanupCache() {
+  const now = Date.now()
+  for (const [key, entry] of cache.entries()) {
+    if (now - entry.timestamp > CACHE_TTL) {
+      cache.delete(key)
+    }
+  }
+}
+
+// Her 10 dakikada bir önbelleği temizle
+setInterval(cleanupCache, 10 * 60 * 1000)
+
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+  const cacheKey = `${request.method}:${pathname}`
+  
+  // Önbellekten kontrol et
+  const cached = cache.get(cacheKey)
+  if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
+    return cached.response
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,
     },
   })
+
+  // Statik dosyalar ve API rotaları için middleware'i atla
+  if (pathname.startsWith('/_next/') || 
+      pathname.includes('.') || 
+      pathname.startsWith('/api/')) {
+    return response
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -17,38 +56,14 @@ export async function middleware(request: NextRequest) {
           return request.cookies.get(name)?.value
         },
         set(name: string, value: string, options: any) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
+          request.cookies.set({ name, value, ...options })
+          response = NextResponse.next({ request: { headers: request.headers } })
+          response.cookies.set({ name, value, ...options })
         },
         remove(name: string, options: any) {
-          request.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          })
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
+          request.cookies.set({ name, value: '', ...options })
+          response = NextResponse.next({ request: { headers: request.headers } })
+          response.cookies.set({ name, value: '', ...options })
         },
       },
     }

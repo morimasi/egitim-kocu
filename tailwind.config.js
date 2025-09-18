@@ -1,13 +1,38 @@
 /** @type {import('tailwindcss').Config} */
 import animate from 'tailwindcss-animate';
 
+// Daha hızlı derleme için safleyi devre dışı bırak
+if (process.env.NODE_ENV !== 'production') {
+  process.env.TAILWIND_DISABLE_TOUCH = 'true';
+  process.env.TAILWIND_MODE = 'watch';
+}
+
 const config = {
-  darkMode: ["class"],
+  // JIT modunu kullanarak daha hızlı derleme
+  mode: 'jit',
+  // Karanlık modu sınıf tabanlı olarak ayarla
+  darkMode: ['class'],
+  // İçerik tarama yolları
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  // Üretimde kullanılmayan stilleri temizle
+  ...(process.env.NODE_ENV === 'production' ? {
+    purge: {
+      content: [
+        './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+        './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+        './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+      ],
+      options: {
+        safelist: ['dark'],
+        keyframes: true,
+        fontFace: true,
+      },
+    },
+  } : {}),
   theme: {
     container: {
       center: true,
